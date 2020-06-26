@@ -5,12 +5,9 @@ import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Dialog from '@material-ui/core/Dialog';
+import Popover from '@material-ui/core/Popover';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -67,14 +64,18 @@ export const Header = () => {
   )
 
   const typeMenu = (
-    <Menu
+    <Popover
       id="type-menu"
+      open={typeOpen}
       anchorEl={type}
-      keepMounted
-      open={Boolean(type)}
-      onClose={() => {
-        setType(null)
-        setTypeOpen(false)
+      onClose={() => {setTypeOpen(false)}}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
       }}
     >
       <RadioGroup aria-label="gender" name="type" value={typeRedux} className="header-sorts" onChange={handleChange}>
@@ -83,7 +84,7 @@ export const Header = () => {
         )}
       </RadioGroup>
 
-    </Menu>
+    </Popover>
   )
 
   return (
@@ -101,10 +102,8 @@ export const Header = () => {
                     }}>
                       TÜRLER
                     </Button>
-                    
-                    <Dialog onClose={() => setTypeOpen(false)} aria-labelledby="simple-dialog-title" open={typeOpen}>
+
                       {typeMenu}
-                    </Dialog>
     
                     <Button variant="contained" color="primary" endIcon={!sortOpen ? <ExpandMoreIcon /> : <ExpandLessIcon />} aria-controls="sort-menu" aria-haspopup="true" onClick={(e) => {
                       setSort(e.currentTarget)

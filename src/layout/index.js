@@ -5,6 +5,7 @@ import { DEVICE_TYPE } from './../redux/actions/types';
 
 import { Header } from './header';
 import { Content } from './content';
+import { Settings } from './settingsPanel';
 
 export const Layout = (props) => {
   const onlyWidth = useWindowWidth();
@@ -24,6 +25,7 @@ export const Layout = (props) => {
 
   return (
     <div className={'layout ' + themeColor}>
+        <Settings />
         <Header />
         <Content>
           {props.children}

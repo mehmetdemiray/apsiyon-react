@@ -8,7 +8,7 @@ const initialState = {
   movieTypes: ["Film", "Dizi", "Episode", "Hepsi"],
   sortTypes: ["Puana Göre(Artan)", "Puana Göre(Azalan)"],
   sort: "",
-  type: ""
+  type: "Hepsi"
 };
 
 export default function(state= initialState, action) {
