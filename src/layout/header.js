@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+﻿import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {SORT, TYPE} from './../redux/actions/types';
 import { Link } from 'react-router-dom';
@@ -19,10 +19,9 @@ import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import Add from '@material-ui/icons/Add';
 import Container from '@material-ui/core/Container';
-import history from './../history';
 
 export const Header = () => {
-  const [page] = useState(history.location.hash)
+  const [page] = useState(window.location.hash)
   const [pathname] = useState('#/new')
   const [typeOpen, setTypeOpen] = useState(false)
   const [sortOpen, setSortOpen] = useState(false)
@@ -89,7 +88,7 @@ export const Header = () => {
 
   return (
     <header>
-      <AppBar position="static" className="navigation">
+      <AppBar position="fixed" className="navigation">
         <Container maxWidth="lg">
           <Toolbar className="header-content">
             {page !== pathname ? 
@@ -100,7 +99,7 @@ export const Header = () => {
                       setType(e.currentTarget)
                       setTypeOpen(!typeOpen)
                     }}>
-                      TÜRLER
+                      TÃœRLER
                     </Button>
 
                       {typeMenu}
@@ -117,11 +116,11 @@ export const Header = () => {
                 }
               </div> : 
               device !== "mobile" ?
-                <Button variant="contained" color="primary" startIcon={<ChevronLeft />} component={Link} to="/">Listeye Dön</Button>:
+                <Button variant="contained" color="primary" startIcon={<ChevronLeft />} component={Link} to="/">Listeye Dönn</Button>:
                 <IconButton component={Link} to="/"><ChevronLeft /></IconButton>
             }
 
-            <Typography variant="h6" className="logo-text">Case Study</Typography>
+            <Typography variant="h6" className="logo-text">{page}</Typography>
             {device !== "mobile" ?
               <Button disabled={page !== pathname ? false : true} variant="contained" color="primary" startIcon={<Add />} component={Link} to="/new">Yeni Kayıt</Button>:
               <IconButton disabled={page !== pathname ? false : true} component={Link} to="/new"><Add /></IconButton>

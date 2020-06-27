@@ -1,8 +1,10 @@
 ﻿import React, { useState } from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {ADD_MOVIE} from './../redux/actions/types';
 import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -10,12 +12,18 @@ import SaveIcon from '@material-ui/icons/Save';
 import { Layout } from './../layout';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
+import Dialog from './../components/dialog'
 
 export const NewMovie = () => {
   const dispatch = useDispatch();
+  const movies = useSelector(state => state.MOVIES.moviesList)
   const [imdbError, setImdbError] = useState(false);
+  const [imdbLink, setImdbLink] = useState('')
   const [loading, setLoading] = useState(false);
-  const [values, setValues] = useState({name: "", year: "", point: "", type: ""})
+  const [values, setValues] = useState({name: "", year: "", point: "", type: "", imdb: "", id: ""})
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [saved, setSaved] = useState(false);
 
   const checkLink = (e) => {
     let splittedValue = e.target.value.split("/");
@@ -31,7 +39,7 @@ export const NewMovie = () => {
         }
       } else if (splittedValue[0]) {
         if (splittedValue[0].substring(0,2) === "tt") {
-          getMovieFromImdb(splittedValue[4])
+          getMovieFromImdb(splittedValue[0])
           return setImdbError(false)
         } else {
           return setImdbError(true)
@@ -46,6 +54,7 @@ export const NewMovie = () => {
 
   const handleChangeLink = (e) => {
     checkLink(e)
+    setImdbLink(e.target.value)
   }
   // Handle Input Changes
   const handleChange = (e) => {
@@ -53,6 +62,9 @@ export const NewMovie = () => {
     setValues({...values, [name]: value})
   }
 
+  const modalResult = (result) => {
+    setSaved(result)
+  }
   // Getting Movie From IMDB
   const getMovieFromImdb = (id) => {
     setLoading(true)
@@ -61,12 +73,13 @@ export const NewMovie = () => {
         console.log(res)
         if (res.data.Response === "False") {
           setImdbError(true)
+          setLoading(false)
         } else {
           setImdbError(false)
-          setValues({name: res.data.Title, year: res.data.Year.substring(0,4), point: Math.round(res.data.imdbRating), type: changeType(res.data.Type)})
+          setValues({name: res.data.Title, year: parseInt(res.data.Year.substring(0,4)), point: Math.round(res.data.imdbRating), type: changeType(res.data.Type), id: res.data.imdbID})
+          setLoading(false)
         }
       })
-    setLoading(false)
   }
 
   const changeType = (type) => {
@@ -81,14 +94,55 @@ export const NewMovie = () => {
         return "Film"
     }
   }
-
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
   const handleSend = () => {
-    console.log(values)
-    dispatch({type: ADD_MOVIE, payload: {"movie_name": values.name, "movie_year": values.year, "movie_point": values.point, "movie_type":values.type, "movie_isVoted": "false" }})
+    if (searchInAray() && validations()) {
+      setSaved(true)
+      setValues({name: "", year: "", point: "", type: "", imdb: "", id: ""})
+      setImdbLink('');
+      dispatch({type: ADD_MOVIE, payload: {"movie_name": values.name, "movie_year": values.year, "movie_point": parseInt(values.point), "movie_type":values.type, "movie_isVoted": "false", "movie_id": values.id}})
+    }
+  }
+
+  const searchInAray = () => {
+    let obj = movies.find(o => o.movie_name === values.name);
+    if (obj === undefined ) {
+      setError(false)
+      return true
+    } else {
+      setError(true)
+      setErrorMessage("Bu film daha önce eklenmiş")
+      return false
+    }
+  }
+
+  const validations = () => {
+    if (!values.name || !values.type || !values.point || !values.year || !values.type) {
+      setError(true)
+      setErrorMessage("Hiçbir alan boş bırakılamaz!")
+      return false;
+    } else {
+      setError(false)
+      return(true)
+    }
   }
 
   return (
     <Layout>
+      <Snackbar open={error} autoHideDuration={6000} onClose={() => {
+        setError(false)
+        setErrorMessage("")
+      }}>
+        <Alert onClose={() => {
+          setError(false)
+          setErrorMessage("")
+        }} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
       <form className="new-movie-form">
           <TextField
             id="outlined-helperText"
@@ -99,6 +153,7 @@ export const NewMovie = () => {
             onChange={handleChangeLink}
             fullWidth
             disabled={loading}
+            value={imdbLink}
           />
           <Grid container spacing={3} style={{marginTop: "30px"}}>
             <Grid item lg={12} md={12} sm={12} xs={12}>
@@ -131,6 +186,7 @@ export const NewMovie = () => {
             </Grid>
           </Grid>
       </form>
+      <Dialog type="success" saved={saved} title="Kaydedildi" description="Film ekleme işlemi başarılı" modalResult={modalResult} />
     </Layout>
   );
 }

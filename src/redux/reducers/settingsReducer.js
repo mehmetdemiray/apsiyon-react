@@ -3,8 +3,8 @@ import { MOVIE_TYPES } from '../actions/types';
 import { DEVICE_TYPE } from '../actions/types';
 
 const initialState = {
-  themeColor: 'brown',
-  movieTypes: ['brown', 'blue', 'light'],
+  themeColor: 'blue',
+  themeTypes: ['brown', 'blue', 'pink'],
   deviceType: 'desktop'
 };
 

@@ -1,4 +1,8 @@
+@import 'variables';
+
 html, body {
+    width: 100%;
+    height: 100%;
     margin: 0;
 }
 
@@ -7,6 +11,7 @@ header {
     .header-content {
         flex-grow: 1;
         justify-content: space-between;
+        height: 100%;
     }
     .navigation {
         background-color: #ffffff;
@@ -32,10 +37,11 @@ header {
 }
 
 .content {
-    margin-top: 30px;
+    margin-top: 120px;
 }
 
-.movies {
+.layout .movies {
+    background: #efefef;
     margin-top: 30px;
     &:first-child {
         margin-top: 0;
@@ -43,19 +49,41 @@ header {
 }
 
 .movie-card {
+    align-items: flex-end;
     .grid {
-        div:first-child {
+        > div:first-child {
             text-align: left;
         }
-        div:nth-child(2) {
+        > div:nth-child(2) {
             text-align: center;
         }
-        div:nth-child(3) {
+        > div:nth-child(3) {
             text-align: right;
         }
+        .mc-second.MuiGrid-grid-xs-6 {
+            text-align: left;
+        }
+        .mc-third.MuiGrid-grid-xs-6 .votest {
+            flex-direction: row;
+        }
+    }
+    .MuiGrid-item {
+        align-self: center;
+        p {
+            display: inline-block;
+            vertical-align: super;
+        }
+    }
+
+}
+.dialog {
+    .MuiDialogTitle-root {
+        text-align: center;
+    }
+    .dialog-buttons {
+        justify-content: space-around;
     }
 }
-
 .movie-name {
     cursor: pointer;
     position: relative;
@@ -64,12 +92,155 @@ header {
     }
 }
 
-.movie-start {
-    color: yellow;
-}
+
 
 // NEW PAGE
 .new-movie-form {
     max-width: 600px;
     margin: 0 auto;
+}
+
+.settings-panel{
+    z-index: 99;
+    height: 200px;
+    width: 200px;
+    position: fixed;
+    margin-top: 100px;
+    overflow: visible !important;
+    background: #efefef !important;
+    &.closed {
+        right: -202px;
+        transition: all .5s ease-in-out;
+    }
+    &.opened {
+        right: 0;
+        transition: all .5s ease-in-out;
+    }
+    .MuiCardContent-root {
+        height: 100%;
+    }
+}
+
+.settings-button {
+    min-width: 40px !important;
+    max-width: 40px !important;
+    min-height: 40px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: none !important;
+    position: absolute;
+    left: -56px;
+    background: #efefef !important;
+    padding: 10px !important;
+}
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+    from {
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes rotating {
+    from {
+      -ms-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -ms-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  .rotating {
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+  }
+
+  .selector {
+      height: 30px;
+      width: 30px;
+        border-radius: 15px;
+        margin-right: 10px;
+        cursor: pointer;
+        svg {
+            color: #ffffff;
+            padding: 2px;
+        }
+        &.brown {
+            background-color: $brown;
+        }
+        &.blue {
+            background-color: $blue;
+        }
+        &.pink {
+            background-color: $pink;
+        }
+  }
+  .select-group {
+    display: flex;
+    justify-content: center;
+}
+.brown {
+    .MuiButton-containedPrimary {
+        background-color: $brown;
+        &:hover {
+            background-color: darken($brown, 10%);
+        }
+    }
+    .movie-star,
+    .MuiSvgIcon-colorPrimary {
+        color: $brown;
+    }
+}
+
+.blue {
+    .MuiButton-containedPrimary {
+        background-color: $blue;
+        &:hover {
+            background-color: darken($blue, 10%);
+        }
+    }
+    .movie-star,
+    .MuiSvgIcon-colorPrimary {
+        color: $blue;
+    }
+}
+
+.pink {
+    .MuiButton-containedPrimary {
+        background-color: $pink;
+        &:hover {
+            background-color: darken($pink, 10%);
+        }
+    }
+    .movie-star,
+    .MuiSvgIcon-colorPrimary {
+        color: $pink;
+    }
+}
+
+.movie-card .votes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    .up-vote {
+        color: green;
+    }
+    .down-vote {
+        color: red;
+    }
 }

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Route, Switch, HashRouter } from "react-router-dom";
 
 import { Home } from './pages/home';
 import { NewMovie } from './pages/newMovie';
 import { Err404 } from './pages/404';
 
-const App = () => {
+export default function App() {
 
   return (
     <React.Fragment>
@@ -19,6 +19,4 @@ const App = () => {
     </React.Fragment>
   );
 }
-
-export default App;
 
