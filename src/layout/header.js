@@ -1,4 +1,8 @@
-﻿import React, {useState} from 'react';
+﻿/**
+ * HEADER
+ */
+
+import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
@@ -19,15 +23,15 @@ import {SortButton} from './../components/sortButton';
 
 export const Header = () => {
   const device = useSelector(state => state.SETTINGS.deviceType);
-  const [page] = useState(window.location.hash)
-  const [pathname] = useState('#/new')
+  const [page] = useState(window.location.hash) // Path değişimlerini gözlemleyip tetiklettirmek için.
+  const [pathname] = useState('#/new')          // New sayfasının path'ini karşılaştırmak JSX'de kolay olsun diye.  
 
   return (
     <header>
       <AppBar position="fixed" className="navigation">
         <Container maxWidth="lg">
           <Toolbar className="header-content">
-              {device !== "mobile" ?
+              {device !== "mobile" && page !== pathname ?
                 <div className="h-left">     
                   <React.Fragment>
                     <TypesButton />

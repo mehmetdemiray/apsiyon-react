@@ -1,0 +1,59 @@
+﻿.brown {
+  .MuiButton-containedPrimary {
+    background-color: $brown;
+    &:hover {
+      background-color: darken($brown, 10%);
+    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $brown;
+  }
+  .MuiPaginationItem-textPrimary.Mui-selected {
+    background-color: $brown;
+  }
+}
+
+.blue {
+  .MuiButton-containedPrimary {
+    background-color: $blue;
+    &:hover {
+        background-color: darken($blue, 10%);
+    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $blue;
+  }
+  .MuiPaginationItem-textPrimary.Mui-selected {
+    background-color: $blue;
+  }
+}
+
+.pink {
+  .MuiButton-containedPrimary {
+    background-color: $pink;
+    &:hover {
+      background-color: darken($pink, 10%);
+    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $pink;
+  }
+  .MuiPaginationItem-textPrimary.Mui-selected {
+    background-color: $pink;
+  }
+}
+
+.movie-card .votes {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  .up-vote {
+    color: $success;
+  }
+  .down-vote {
+    color: $danger;
+  }
+}

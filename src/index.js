@@ -5,10 +5,10 @@ import "@babel/polyfill";
 
 import React from 'react';
 import {render} from 'react-dom';
-import App from './App';
+import App from './App';                // Başlangıç componenti
 import { Provider } from "react-redux"; // React Redux
 import store from "./redux/store";      // Redux Store
-import './assets/scss/styles.scss';
+import './assets/scss/styles.scss';     // Ana scss dosyası
 
 const target = document.querySelector('#root')
 render(

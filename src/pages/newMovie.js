@@ -1,35 +1,49 @@
-﻿import React, { useState } from 'react';
+﻿/**
+ * PAGE: NEW
+ * Route: #/new
+ */
+import React, { useState } from 'react';
+import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {ADD_MOVIE} from './../redux/actions/types';
-import TextField from '@material-ui/core/TextField';
+
+// MODULES
+import Grid from '@material-ui/core/Grid';
 import Radio from '@material-ui/core/Radio';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Backdrop from '@material-ui/core/Backdrop';
+import MuiAlert from '@material-ui/lab/Alert';
+import SaveIcon from '@material-ui/icons/Save';
+import TextField from '@material-ui/core/TextField';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import SaveIcon from '@material-ui/icons/Save';
-import { Layout } from './../layout';
-import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
+// COMPONENTS
 import Dialog from './../components/dialog';
+import { Layout } from './../layout';
 
 export const NewMovie = () => {
   const dispatch = useDispatch();
-  const movies = useSelector(state => state.MOVIES.moviesList)
-  const [imdbError, setImdbError] = useState(false);
-  const [imdbLink, setImdbLink] = useState('')
-  const [loading, setLoading] = useState(false);
-  const [values, setValues] = useState({name: "", year: "", point: "", type: "", imdb: "", id: ""})
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [saved, setSaved] = useState(false);
 
+  // USEEFFECT
+  const movies = useSelector(state => state.MOVIES.moviesList)
+  
+  // USESTATES
+  const [error, setError] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [values, setValues] = useState({name: "", year: "", point: "", type: "", imdb: "", id: ""})
+  const [loading, setLoading] = useState(false);
+  const [imdbLink, setImdbLink] = useState('')
+  const [imdbError, setImdbError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // Gelen IMDB linkinin basit bir doğrulamasını yapar.
   const checkLink = (e) => {
     let splittedValue = e.target.value.split("/");
 
-    // Some Validations
     if (e.target.value.length !== 0) {
       if (splittedValue[4]) {
         if (splittedValue[4].substring(0,2) === "tt") {
@@ -53,16 +67,18 @@ export const NewMovie = () => {
     }
   }
 
+  // IMDB inputundan gelen değişkenlerle componenti güncellere
   const handleChangeLink = (e) => {
     checkLink(e)
     setImdbLink(e.target.value)
   }
-  // Handle Input Changes
+  // Inputlardan gelen değerlerle componenti günceller.
   const handleChange = (e) => {
     const {name, value} = e.target
     setValues({...values, [name]: value})
   }
 
+  // Child componentten dönen sonuca göre componenti günceller.
   const modalResult = (result) => {
     setSaved(result)
   }
@@ -71,7 +87,6 @@ export const NewMovie = () => {
     setLoading(true)
     axios.get('http://www.omdbapi.com/?i='+id+'&apikey=d3393eb4')
       .then(res => {
-        console.log(res)
         if (res.data.Response === "False") {
           setImdbError(true)
           setLoading(false)
@@ -83,6 +98,7 @@ export const NewMovie = () => {
       })
   }
 
+  // IMDB apisinden gelen type'ları türkçeye döndürür.
   const changeType = (type) => {
     switch (type) {
       case "movie":
@@ -95,9 +111,13 @@ export const NewMovie = () => {
         return "Film"
     }
   }
+
+  // Toast alert basar.
   function AlertX(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
+
+  // Son kontrol yapıp global state'e yollar.
   const handleSend = () => {
     if (searchInAray() && validations()) {
       setSaved(true)
@@ -107,6 +127,9 @@ export const NewMovie = () => {
     }
   }
 
+  /**
+   * Aynı isimli film tespit eder. true/false döndürür.
+   */
   const searchInAray = () => {
     let obj = movies.find(o => o.movie_name === values.name);
     if (obj === undefined ) {
@@ -119,6 +142,9 @@ export const NewMovie = () => {
     }
   }
 
+  /**
+   * Formu validate eder. Hata döndürür.
+   */
   const validations = () => {
     if (!values.name || !values.type || !values.point || !values.year || !values.type) {
       setError(true)
@@ -194,6 +220,9 @@ export const NewMovie = () => {
               </Button>
             </Grid>
           </Grid>
+          <Backdrop open={loading}>
+            <CircularProgress color="inherit" />
+          </Backdrop>
       </form>
       <Dialog type="success" saved={saved} title="Kaydedildi" description="Film ekleme işlemi başarılı" modalResult={modalResult} />
     </Layout>

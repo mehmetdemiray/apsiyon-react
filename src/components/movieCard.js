@@ -1,6 +1,7 @@
 ﻿import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {INCREASE_POINT, DECREASE_POINT, DELETE_MEDIA, CURRENT_PAGE, TOTAL_PAGE} from './../redux/actions/types'
+import {INCREASE_POINT, DECREASE_POINT, DELETE_MEDIA} from './../redux/actions/types'
+
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,8 +21,8 @@ export const MovieCard = (props) => {
   const [isHover, setIsHover] = useState(false)
   const [index, setIndex] = useState()
   const [deleteReq, setDeleteReq] = useState(false)
+  
   const current = useSelector(state => state.SETTINGS.currentPage)
-  const total = useSelector(state => state.SETTINGS.totalPage)
 
   useEffect(() => {
     for (let i = 0; i < movies.length; i++) {
@@ -56,7 +57,7 @@ export const MovieCard = (props) => {
         <Grid container spacing={3} className="grid">
             <Grid item xs={device === "mobile" ? 12 : 8} className="mc-first">
               <Typography variant="h5" onClick={handleDelete} className="movie-name" onMouseOut={() => setIsHover(false)} onMouseOver={() => setIsHover(true)} color="textSecondary">
-                {props.movie.movie_name}({props.movie.movie_year}) {isHover ? <DeleteOutlineOutlinedIcon /> : null}
+                {props.movie.movie_name}({props.movie.movie_year}) {device === "mobile" ? <DeleteOutlineOutlinedIcon /> : isHover ? <DeleteOutlineOutlinedIcon /> : null}
               </Typography>
               <Typography variant="h6">
                 <strong>Tür: </strong>{props.movie.movie_type}
@@ -80,7 +81,7 @@ export const MovieCard = (props) => {
             </Grid>
         </Grid>
       </CardContent>
-      <Dialog type="error" delete={deleteReq} title="Sil" description="Silmek istediğinize emin misiniz?" modalResult={modalResult}/>
+      <Dialog type="error" delete={deleteReq} title="Sil" description={`${props.movie.movie_name} Silmek istediğinize emin misiniz?`} modalResult={modalResult}/>
     </Card>
   );
 }

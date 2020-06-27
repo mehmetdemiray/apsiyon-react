@@ -5,9 +5,6 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 const initialState = {};
 const middleware = [thunk];
-// Aslında dikkat etmemiz gereken tek şey 2 parametre
-// rootReducer olarak yazdığımız reducers/index.js
-// initialState olarak başlangıç State'i
 const store = createStore(
   rootReducer,
   initialState,

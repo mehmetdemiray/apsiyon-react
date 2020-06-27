@@ -1,10 +1,12 @@
 @import 'variables';
 @import 'mixins';
+@import 'color-settings';
 
 html, body {
-  width: 100%;
+  max-width: 100%;
   height: 100%;
   margin: 0;
+  overflow: visible !important;
 }
 
 .none {
@@ -156,7 +158,6 @@ header {
   }
 }
 
-// NEW PAGE
 .new-movie-form {
   max-width: 600px;
   margin: 0 auto;
@@ -167,7 +168,7 @@ header {
   height: 200px;
   width: 200px;
   position: fixed;
-  margin-top: 100px;
+  margin-top: 130px;
   overflow: visible !important;
   background: $light !important;
   &.closed {
@@ -239,54 +240,4 @@ header {
   .select-group {
     display: flex;
     justify-content: center;
-}
-.brown {
-  .MuiButton-containedPrimary {
-    background-color: $brown;
-    &:hover {
-      background-color: darken($brown, 10%);
-    }
-  }
-  .movie-star,
-  .MuiSvgIcon-colorPrimary {
-    color: $brown;
-  }
-}
-
-.blue {
-  .MuiButton-containedPrimary {
-    background-color: $blue;
-    &:hover {
-        background-color: darken($blue, 10%);
-    }
-  }
-  .movie-star,
-  .MuiSvgIcon-colorPrimary {
-    color: $blue;
-  }
-}
-
-.pink {
-  .MuiButton-containedPrimary {
-    background-color: $pink;
-    &:hover {
-      background-color: darken($pink, 10%);
-    }
-  }
-  .movie-star,
-  .MuiSvgIcon-colorPrimary {
-    color: $pink;
-  }
-}
-
-.movie-card .votes {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  .up-vote {
-    color: $success;
-  }
-  .down-vote {
-    color: $danger;
-  }
 }
