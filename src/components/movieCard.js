@@ -1,6 +1,6 @@
 ﻿import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {INCREASE_POINT, DECREASE_POINT} from './../redux/actions/types'
+import {INCREASE_POINT, DECREASE_POINT, DELETE_MEDIA, CURRENT_PAGE, TOTAL_PAGE} from './../redux/actions/types'
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
@@ -10,15 +10,18 @@ import StarIcon from '@material-ui/icons/Star';
 import Typography from '@material-ui/core/Typography';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
+import Dialog from './../components/dialog';
 
 export const MovieCard = (props) => {
   const device = useSelector(state => state.SETTINGS.deviceType)
   const movies = useSelector(state => state.MOVIES.moviesList)
 
-
   const dispatch = useDispatch()
   const [isHover, setIsHover] = useState(false)
   const [index, setIndex] = useState()
+  const [deleteReq, setDeleteReq] = useState(false)
+  const current = useSelector(state => state.SETTINGS.currentPage)
+  const total = useSelector(state => state.SETTINGS.totalPage)
 
   useEffect(() => {
     for (let i = 0; i < movies.length; i++) {
@@ -26,7 +29,7 @@ export const MovieCard = (props) => {
         setIndex(i)
       }
     }
-  }, [movies])
+  }, [current, movies, props])
 
   const upVote = () => {
     dispatch({type: INCREASE_POINT, payload: index})
@@ -36,19 +39,30 @@ export const MovieCard = (props) => {
     dispatch({type: DECREASE_POINT, payload: index})
   }
 
+  const handleDelete = () => {
+    setDeleteReq(true)
+  }
+
+  const modalResult = (result) => {
+    setDeleteReq(false)
+    if (result) {
+      dispatch({type: DELETE_MEDIA, payload: index})
+    }
+  }
+
   return (
     <Card variant="outlined" className="movies">
       <CardContent className="movie-card">
         <Grid container spacing={3} className="grid">
-            <Grid item xs={device === "mobile" ? 12 : 10} className="mc-first">
-              <Typography variant="h5" className="movie-name" onMouseOut={() => setIsHover(false)} onMouseOver={() => setIsHover(true)} color="textSecondary">
+            <Grid item xs={device === "mobile" ? 12 : 8} className="mc-first">
+              <Typography variant="h5" onClick={handleDelete} className="movie-name" onMouseOut={() => setIsHover(false)} onMouseOver={() => setIsHover(true)} color="textSecondary">
                 {props.movie.movie_name}({props.movie.movie_year}) {isHover ? <DeleteOutlineOutlinedIcon /> : null}
               </Typography>
               <Typography variant="h6">
                 <strong>Tür: </strong>{props.movie.movie_type}
               </Typography>
             </Grid>
-            <Grid item xs={device === "mobile" ? 6 : 1} className="mc-second">
+            <Grid item xs={device === "mobile" ? 6 : 3} className="mc-second">
               <StarIcon className="movie-star" />
               <Typography variant="body1">
                 {props.movie.movie_point}
@@ -66,6 +80,7 @@ export const MovieCard = (props) => {
             </Grid>
         </Grid>
       </CardContent>
+      <Dialog type="error" delete={deleteReq} title="Sil" description="Silmek istediğinize emin misiniz?" modalResult={modalResult}/>
     </Card>
   );
 }

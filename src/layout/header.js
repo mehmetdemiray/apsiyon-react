@@ -1,132 +1,55 @@
-﻿import React, {useState, useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {SORT, TYPE} from './../redux/actions/types';
-import { Link } from 'react-router-dom';
+﻿import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
+import {Link} from 'react-router-dom';
+
+// MODULES
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Popover from '@material-ui/core/Popover';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import Add from '@material-ui/icons/Add';
+import Toolbar from '@material-ui/core/Toolbar';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
+
+// ICONS
+import Add from '@material-ui/icons/Add';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+
+// COMPONENTS
+import {TypesButton} from './../components/typesButton';
+import {SortButton} from './../components/sortButton';
 
 export const Header = () => {
+  const device = useSelector(state => state.SETTINGS.deviceType);
   const [page] = useState(window.location.hash)
   const [pathname] = useState('#/new')
-  const [typeOpen, setTypeOpen] = useState(false)
-  const [sortOpen, setSortOpen] = useState(false)
-  const [sort, setSort] = useState(null);
-  const [type, setType] = useState(null);
-  const device = useSelector(state => state.SETTINGS.deviceType);
-
-  const sortTypes = useSelector(state => state.MOVIES.sortTypes);
-  const sortRedux = useSelector(state => state.MOVIES.sort);
-  const movieTypes = useSelector(state => state.MOVIES.movieTypes);
-  const typeRedux = useSelector(state => state.MOVIES.type);
-
-  const dispatch = useDispatch()
-
-  const handleChange = (e) => {
-    setTypeOpen(false);
-    dispatch({type: TYPE, payload: e.target.value})
-  }
-
-  const sortMenu = (
-    <Menu
-      id="sort-menu"
-      anchorEl={sort}
-      keepMounted
-      open={Boolean(sort)}
-      onClose={() => {
-        setSort(null)
-        setSortOpen(false)
-      }}
-    >
-      {sortTypes.map((sort, i)=>
-        <MenuItem key={i} onClick={() => {
-          setSort(null) 
-          setSortOpen(false)
-          dispatch({type: SORT, payload: sort})
-        }}>{sort}</MenuItem>
-      )}
-    </Menu>
-  )
-
-  const typeMenu = (
-    <Popover
-      id="type-menu"
-      open={typeOpen}
-      anchorEl={type}
-      onClose={() => {setTypeOpen(false)}}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'left',
-      }}
-    >
-      <RadioGroup aria-label="gender" name="type" value={typeRedux} className="header-sorts" onChange={handleChange}>
-        {movieTypes.map((movieType, i)=>
-          <FormControlLabel key={i} labelPlacement="start" value={movieType} control={<Radio />} label={movieType} />
-        )}
-      </RadioGroup>
-
-    </Popover>
-  )
 
   return (
     <header>
       <AppBar position="fixed" className="navigation">
         <Container maxWidth="lg">
           <Toolbar className="header-content">
-            {page !== pathname ? 
-              <div className="h-left">
-                {device !== "mobile" ?
+              {device !== "mobile" ?
+                <div className="h-left">     
                   <React.Fragment>
-                    <Button variant="contained" color="primary" endIcon={!typeOpen ? <ExpandMoreIcon /> : <ExpandLessIcon />} aria-controls="type-menu" aria-haspopup="true" onClick={(e) => {
-                      setType(e.currentTarget)
-                      setTypeOpen(!typeOpen)
-                    }}>
-                      TÃœRLER
-                    </Button>
-
-                      {typeMenu}
-    
-                    <Button variant="contained" color="primary" endIcon={!sortOpen ? <ExpandMoreIcon /> : <ExpandLessIcon />} aria-controls="sort-menu" aria-haspopup="true" onClick={(e) => {
-                      setSort(e.currentTarget)
-                      setSortOpen(!sortOpen)
-                    }}>
-                      SIRALA
-                    </Button>
-                    {sortMenu}
-                  </React.Fragment> :
-                  <IconButton><FilterListIcon /></IconButton>
-                }
-              </div> : 
-              device !== "mobile" ?
-                <Button variant="contained" color="primary" startIcon={<ChevronLeft />} component={Link} to="/">Listeye Dönn</Button>:
-                <IconButton component={Link} to="/"><ChevronLeft /></IconButton>
-            }
-
-            <Typography variant="h6" className="logo-text">{page}</Typography>
-            {device !== "mobile" ?
-              <Button disabled={page !== pathname ? false : true} variant="contained" color="primary" startIcon={<Add />} component={Link} to="/new">Yeni Kayıt</Button>:
-              <IconButton disabled={page !== pathname ? false : true} component={Link} to="/new"><Add /></IconButton>
-            }
+                    <TypesButton />
+                    <SortButton />
+                  </React.Fragment>
+                </div> : ""
+              }
+              <Typography variant="h6" className={device === "mobile" ? "logo-text relative" : "logo-text"}>{page === pathname ? "Yeni Film Ekleme" : "Film Listesi"}</Typography>
+              {page !== pathname ? 
+                <Button disabled={page !== pathname ? false : true} className={device === "mobile" && page === pathname ? "none" : ""} variant="contained" color="primary" startIcon={<Add />} component={Link} to="/new">Yeni Kayıt</Button> : 
+                <Button variant="contained" color="primary" startIcon={<ChevronLeft />} component={Link} to="/">Listeye Dön</Button>
+              }
           </Toolbar>
         </Container>
+        {device === "mobile" ?
+          <Container>
+              <div className="mobile-header">
+                <TypesButton size="small"/>
+                <SortButton size="small"/>
+              </div>
+          </Container> : null
+        }
       </AppBar>
     </header>
   );

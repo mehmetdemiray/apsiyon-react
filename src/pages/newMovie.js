@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Radio from '@material-ui/core/Radio';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import Button from '@material-ui/core/Button';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,7 +13,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { Layout } from './../layout';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import Dialog from './../components/dialog'
+import Dialog from './../components/dialog';
 
 export const NewMovie = () => {
   const dispatch = useDispatch();
@@ -94,7 +95,7 @@ export const NewMovie = () => {
         return "Film"
     }
   }
-  function Alert(props) {
+  function AlertX(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
   const handleSend = () => {
@@ -135,12 +136,12 @@ export const NewMovie = () => {
         setError(false)
         setErrorMessage("")
       }}>
-        <Alert onClose={() => {
+        <AlertX onClose={() => {
           setError(false)
           setErrorMessage("")
         }} severity="error">
           {errorMessage}
-        </Alert>
+        </AlertX>
       </Snackbar>
 
       <form className="new-movie-form">
@@ -155,6 +156,14 @@ export const NewMovie = () => {
             disabled={loading}
             value={imdbLink}
           />
+          <Alert variant="outlined" severity="info" className="alert">
+            <AlertTitle>Bilgi</AlertTitle>
+            <p>- IMDB Linki ya da TitleId'si yapıştırılıp otomatik film eklenebilir.</p>
+            <p>- IMDB'den film çekildikten sonra manuel düzenleme yapılabilir</p>
+            <p>- IMDB linki ya da id'si girilmeden manuel giriş yapılabilir</p>
+            <p>- Aynı isimli film girişine izin vermez.</p>
+            <p>- Aşağıdaki formun tamamının dolu olması gerekir.</p>
+          </Alert>
           <Grid container spacing={3} style={{marginTop: "30px"}}>
             <Grid item lg={12} md={12} sm={12} xs={12}>
             <RadioGroup aria-label="gender" name="type" value={values.type} onChange={handleChange} row={true}>

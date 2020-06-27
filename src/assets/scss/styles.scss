@@ -1,246 +1,292 @@
 @import 'variables';
+@import 'mixins';
 
 html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.none {
+  display: none !important;
 }
 
 header {
-    display: flex;
-    .header-content {
-        flex-grow: 1;
-        justify-content: space-between;
-        height: 100%;
+  display: flex;
+  .header-content {
+    flex-grow: 1;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .navigation {
+    background-color: $white;
+  }
+  .h-left button {
+    margin-right: 20px;
+  }
+  .logo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $black;
+    &.relative {
+      position:  relative !important;
+      top: 0;
+      left: 0;
+      transform: none;
     }
-    .navigation {
-        background-color: #ffffff;
-    }
-    .h-left button {
-        margin-right: 20px;
-    }
-    .logo-text {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #000000;
-    }
-}
+  }
 
-.header-sorts {
-    margin: 0 20px;
-    label {
-        display: flex;
-        justify-content: space-between;
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    margin: 0 -16px;
+    background: $light;
+    button {
+      padding: 5px;
+      font-size: 12px;
     }
+  }
+}
+.alert {
+  margin-top: 20px;
+  p {
+    margin-block-start: 10px;
+    margin-block-end: 10px;
+  }
+}
+.header-sorts {
+  margin: 0 20px;
+  label {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .content {
-    margin-top: 120px;
+  margin: 120px 0;
+  &.mobile {
+    margin-top: 150px;
+  }
 }
 
 .layout .movies {
-    background: #efefef;
-    margin-top: 30px;
-    &:first-child {
-        margin-top: 0;
-    }
+  background: $light;
+  margin-top: 30px;
+  &:first-child {
+    margin-top: 0;
+  }
 }
 
 .movie-card {
-    align-items: flex-end;
-    .grid {
-        > div:first-child {
-            text-align: left;
-        }
-        > div:nth-child(2) {
-            text-align: center;
-        }
-        > div:nth-child(3) {
-            text-align: right;
-        }
-        .mc-second.MuiGrid-grid-xs-6 {
-            text-align: left;
-        }
-        .mc-third.MuiGrid-grid-xs-6 .votest {
-            flex-direction: row;
-        }
+  align-items: flex-end;
+  .grid {
+    > div:first-child {
+      text-align: left;
     }
-    .MuiGrid-item {
-        align-self: center;
-        p {
-            display: inline-block;
-            vertical-align: super;
-        }
+    > div:nth-child(2) {
+      text-align: center;
     }
-
+    > div:nth-child(3) {
+      text-align: right;
+    }
+    .mc-second.MuiGrid-grid-xs-6 {
+      text-align: left;
+    }
+    .mc-third.MuiGrid-grid-xs-6 .votest {
+      flex-direction: row;
+    }
+  }
+  .MuiGrid-item {
+    align-self: center;
+    p {
+      display: inline-block;
+      vertical-align: super;
+    }
+  }
 }
 .dialog {
-    .MuiDialogTitle-root {
-        text-align: center;
+  text-align: center;
+  .MuiDialogTitle-root {
+    text-align: center;
+  }
+  .dialog-buttons {
+    justify-content: space-around;
+  }
+
+  .alert-icon {
+    height: 120px;
+    width: 120px;
+    margin: 0 auto;
+    &.success {
+      color: $success;
     }
-    .dialog-buttons {
-        justify-content: space-around;
+    &.warn {
+      color: $danger;
     }
+  }
+}
+.outer-pagi {
+  display: flex;
+  text-align: center;
+  &.left {
+    text-align: right;
+  }
+  nav {
+    display: inline-block;
+  }
+}
+.pagination {
+  margin:0 auto;
+  &.bottom {
+    margin-top: 30px !important;
+  }
 }
 .movie-name {
-    cursor: pointer;
-    position: relative;
-    svg {
-        color: red;
-    }
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  svg {
+    position: absolute;
+    color: $danger;
+    right: -20px;
+    top: 4px;
+  }
 }
-
-
 
 // NEW PAGE
 .new-movie-form {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .settings-panel{
-    z-index: 99;
-    height: 200px;
-    width: 200px;
-    position: fixed;
-    margin-top: 100px;
-    overflow: visible !important;
-    background: #efefef !important;
-    &.closed {
-        right: -202px;
-        transition: all .5s ease-in-out;
-    }
-    &.opened {
-        right: 0;
-        transition: all .5s ease-in-out;
-    }
-    .MuiCardContent-root {
-        height: 100%;
-    }
+  z-index: 99;
+  height: 200px;
+  width: 200px;
+  position: fixed;
+  margin-top: 100px;
+  overflow: visible !important;
+  background: $light !important;
+  &.closed {
+    right: -202px;
+    transition: all .5s ease-in-out;
+  }
+  &.opened {
+    right: 0;
+    transition: all .5s ease-in-out;
+  }
+  .MuiCardContent-root {
+    height: 100%;
+  }
 }
 
-.settings-button {
-    min-width: 40px !important;
-    max-width: 40px !important;
-    min-height: 40px !important;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    border-right: none !important;
-    position: absolute;
-    left: -56px;
-    background: #efefef !important;
-    padding: 10px !important;
+.settings-panel .settings-button {
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+  position: absolute;
+  left: -40px;
+  background: #efefef;
+  padding: 10px;
 }
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {
     from {
-      -webkit-transform: rotate(0deg);
-      -o-transform: rotate(0deg);
-      transform: rotate(0deg);
+      @include transform(0deg)
     }
     to {
-      -webkit-transform: rotate(360deg);
-      -o-transform: rotate(360deg);
-      transform: rotate(360deg);
+      @include transform(360deg)
     }
   }
   @keyframes rotating {
     from {
-      -ms-transform: rotate(0deg);
-      -moz-transform: rotate(0deg);
-      -webkit-transform: rotate(0deg);
-      -o-transform: rotate(0deg);
-      transform: rotate(0deg);
+      @include transform(0deg)
     }
     to {
-      -ms-transform: rotate(360deg);
-      -moz-transform: rotate(360deg);
-      -webkit-transform: rotate(360deg);
-      -o-transform: rotate(360deg);
-      transform: rotate(360deg);
+      @include transform(360deg)
     }
   }
   .rotating {
-    -webkit-animation: rotating 2s linear infinite;
-    -moz-animation: rotating 2s linear infinite;
-    -ms-animation: rotating 2s linear infinite;
-    -o-animation: rotating 2s linear infinite;
-    animation: rotating 2s linear infinite;
+    @include rotate-animation(2s);
   }
 
   .selector {
-      height: 30px;
-      width: 30px;
-        border-radius: 15px;
-        margin-right: 10px;
-        cursor: pointer;
-        svg {
-            color: #ffffff;
-            padding: 2px;
-        }
-        &.brown {
-            background-color: $brown;
-        }
-        &.blue {
-            background-color: $blue;
-        }
-        &.pink {
-            background-color: $pink;
-        }
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    svg {
+      color: $white;
+      padding: 2px;
+    }
+    &.brown {
+      background-color: $brown;
+    }
+    &.blue {
+      background-color: $blue;
+    }
+    &.pink {
+      background-color: $pink;
+    }
   }
   .select-group {
     display: flex;
     justify-content: center;
 }
 .brown {
-    .MuiButton-containedPrimary {
-        background-color: $brown;
-        &:hover {
-            background-color: darken($brown, 10%);
-        }
+  .MuiButton-containedPrimary {
+    background-color: $brown;
+    &:hover {
+      background-color: darken($brown, 10%);
     }
-    .movie-star,
-    .MuiSvgIcon-colorPrimary {
-        color: $brown;
-    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $brown;
+  }
 }
 
 .blue {
-    .MuiButton-containedPrimary {
-        background-color: $blue;
-        &:hover {
-            background-color: darken($blue, 10%);
-        }
+  .MuiButton-containedPrimary {
+    background-color: $blue;
+    &:hover {
+        background-color: darken($blue, 10%);
     }
-    .movie-star,
-    .MuiSvgIcon-colorPrimary {
-        color: $blue;
-    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $blue;
+  }
 }
 
 .pink {
-    .MuiButton-containedPrimary {
-        background-color: $pink;
-        &:hover {
-            background-color: darken($pink, 10%);
-        }
+  .MuiButton-containedPrimary {
+    background-color: $pink;
+    &:hover {
+      background-color: darken($pink, 10%);
     }
-    .movie-star,
-    .MuiSvgIcon-colorPrimary {
-        color: $pink;
-    }
+  }
+  .movie-star,
+  .MuiSvgIcon-colorPrimary {
+    color: $pink;
+  }
 }
 
 .movie-card .votes {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    .up-vote {
-        color: green;
-    }
-    .down-vote {
-        color: red;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  .up-vote {
+    color: $success;
+  }
+  .down-vote {
+    color: $danger;
+  }
 }

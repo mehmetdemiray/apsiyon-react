@@ -1,0 +1,17 @@
+// MIXINS
+
+@mixin rotate-animation($time) {
+    -webkit-animation: rotating $time linear infinite;
+    -moz-animation: rotating $time linear infinite;
+    -ms-animation: rotating $time linear infinite;
+    -o-animation: rotating $time linear infinite;
+    animation: rotating $time linear infinite;
+}
+
+@mixin transform($deg) {
+    -ms-transform: rotate($deg);
+    -moz-transform: rotate($deg);
+    -webkit-transform: rotate($deg);
+    -o-transform: rotate($deg);
+    transform: rotate($deg);
+}

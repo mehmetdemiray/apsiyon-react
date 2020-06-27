@@ -5,17 +5,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import WarningIcon from '@material-ui/icons/Warning';
 
 export default function AlertDialog(props) {
   const [open, setOpen] = useState(true)
 
   useEffect(() => {
-    setOpen(props.saved)
-    console.log(props.saved)
-  }, [props.saved])
+    props.type === "success" ? setOpen(props.saved) : setOpen(props.delete)
+  }, [props])
 
-  const handleClose = () => {
-    props.modalResult(false)
+  const handleClose = (res) => {
+    props.modalResult(res)
     setOpen(false)
   }
 
@@ -29,17 +30,20 @@ export default function AlertDialog(props) {
       >
         <DialogContent>
           <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+          {props.type === "success" ? 
+            <DoneOutlineIcon className="alert-icon success" /> : <WarningIcon className="alert-icon warn" />
+          }
           <DialogContentText id="alert-dialog-description">
             {props.description}
           </DialogContentText>
         </DialogContent>
         <DialogActions className="dialog-buttons">
           {props.type !== "success" ? 
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={() => handleClose(true)} color="secondary" variant="contained">
               Evet
             </Button>: null
           }
-          <Button variant="contained" onClick={handleClose} color="primary" autoFocus>
+          <Button variant="outlined" onClick={() => handleClose(false)} color="primary" autoFocus>
             {props.type === "success" ? "Tamam" : "Vazgeç"}
           </Button>
         </DialogActions>
