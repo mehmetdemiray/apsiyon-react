@@ -42,9 +42,9 @@ export const NewMovie = () => {
 
   // Gelen IMDB linkinin basit bir doğrulamasını yapar.
   const checkLink = (e) => {
-    let splittedValue = e.target.value.split("/");
+    let splittedValue = e.split("/");
 
-    if (e.target.value.length !== 0) {
+    if (e.length !== 0) {
       if (splittedValue[4]) {
         if (splittedValue[4].substring(0,2) === "tt") {
           getMovieFromImdb(splittedValue[4])
@@ -63,13 +63,14 @@ export const NewMovie = () => {
         return setImdbError(true)
       }
     } else {
+      setValues({name: "", year: "", point: "", type: "", imdb: "", id: ""})
       return setImdbError(false)
     }
   }
 
   // IMDB inputundan gelen değişkenlerle componenti güncellere
   const handleChangeLink = (e) => {
-    checkLink(e)
+    checkLink(e.target.value)
     setImdbLink(e.target.value)
   }
   // Inputlardan gelen değerlerle componenti günceller.
@@ -117,13 +118,19 @@ export const NewMovie = () => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
+  // Otomatik link ekler
+  const handleLink = (val) => {
+    checkLink(val)
+    setImdbLink(val)
+  }
+
   // Son kontrol yapıp global state'e yollar.
   const handleSend = () => {
     if (searchInAray() && validations()) {
       setSaved(true)
       setValues({name: "", year: "", point: "", type: "", imdb: "", id: ""})
       setImdbLink('');
-      dispatch({type: ADD_MOVIE, payload: {"movie_name": values.name, "movie_year": values.year, "movie_point": parseInt(values.point), "movie_type":values.type, "movie_isVoted": "false", "movie_id": values.id}})
+      dispatch({type: ADD_MOVIE, payload: {"movie_name": values.name, "movie_year": values.year, "movie_point": parseInt(values.point), "movie_type":values.type, "movie_isVoted": "false", "movie_id": values.id, "addedDate": Date.now()}})
     }
   }
 
@@ -150,6 +157,14 @@ export const NewMovie = () => {
       setError(true)
       setErrorMessage("Hiçbir alan boş bırakılamaz!")
       return false;
+    } else if (Number.isInteger(values.year) === false) {
+      setError(true)
+      setErrorMessage("Yıl bilgisi hatalı! (Sayı olmalı)")
+      return false;
+    } else if (Number.isInteger(values.point) === false) {
+      setError(true)
+      setErrorMessage("Puan bilgisi hatalı! (Sayı olmalı)")
+      return false;
     } else {
       setError(false)
       return(true)
@@ -175,13 +190,15 @@ export const NewMovie = () => {
             id="outlined-helperText"
             error={imdbError}
             label="IMDB Linki / IMDB ID'si"
-            helperText={imdbError ? "Girilen link ya da id hatalı" : null}
+            helperText={imdbError ? "Girilen link ya da id hatalı. Manuel girişe devam edebilirsiniz." : null}
             variant="outlined"
             onChange={handleChangeLink}
             fullWidth
             disabled={loading}
             value={imdbLink}
           />
+          <Button style={{marginTop: "10px"}} size="small" onClick={() => handleLink("https://www.imdb.com/title/tt0816692/")}>Örnek 1 (Link)</Button>
+          <Button style={{marginLeft: "10px", marginTop: "10px"}} size="small" onClick={() => handleLink("tt0411008")}>Örnek 2 (id)</Button>
           <Alert variant="outlined" severity="info" className="alert">
             <AlertTitle>Bilgi</AlertTitle>
             <p>- IMDB Linki ya da TitleId'si yapıştırılıp otomatik film eklenebilir.</p>
